@@ -1,3 +1,5 @@
+import numpy as np
+
 from resources.battery import Battery
 from resources.propeller import Propeller
 from resources.environment import Environment
@@ -6,7 +8,7 @@ import math
 
 
 class Model:
-    def __init__(self, mass, motors, motor_kv, propeller, battery, environment):
+    def __init__(self, mass, motors, motor_kv, propeller, battery, environment, size):
         __bat = isinstance(battery, Battery)
         __prop = isinstance(propeller, Propeller)
         __env = isinstance(environment, Environment)
@@ -26,20 +28,9 @@ class Model:
         self.__mass = mass
         self.__environment = environment
         self.__motor = Motor(motor_kv)
+        self.__size = size
+        self.__xy_coordinates = self.__get_coordinates()
 
-
-    def test(self, command, v0):
-        return self.__propeller.thrust(self.__motor.rpm(command, self.__battery.voltage(50)), v0)
-
-
-
-    # @staticmethod
-    # def __calc_lift_ratio(weight):
-    #     power_lvl = np.linspace(0, 100, num=100, endpoint=True, dtype=int)
-    #     lift_factor =
-    #     return x
-    #     # temp = time * time
-    #     # f = interp1d(time, temp)
-    #     # plt.plot(f(time))
-    #     # plt.legend(['data', 'linear'], loc='best')
-    #     # plt.show()
+    def __get_coordinates(self):
+        arm = self.__size / math.sqrt(2) / 2000
+        return np.array([[arm, -arm], [arm, arm], [-arm, arm], [-arm, -arm]], dtype="float16")
